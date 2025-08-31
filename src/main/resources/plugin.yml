@@ -17,11 +17,11 @@ commands:
     §d/ohatsukit give [mcid] ...ohatsukitをplayerにgiveする(溢れた分は消える)\n"
     permission: red.man10.ohatsukit
 permissions:
-  red.man10.ec:
+  man10essentials.ec:
     default: op
-  red.man10.mhat:
+  man10essentials.mhat:
     default: op
-  red.man10.ohatsukit:
+  man10essentials.ohatsukit:
     default: op
   group.gm:
     default: false

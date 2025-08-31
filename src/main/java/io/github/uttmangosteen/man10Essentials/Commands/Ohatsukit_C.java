@@ -8,45 +8,45 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.io.BukkitObjectInputStream;
-import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.jetbrains.annotations.NotNull;
 import org.bukkit.Bukkit;
 
-public class Ohatsukit_C implements CommandExecutor {
-    private final JavaPlugin plugin;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-    public Ohatsukit_C(JavaPlugin plugin) {
-        this.plugin = plugin;
-    }
+public record Ohatsukit_C(JavaPlugin plugin) implements CommandExecutor {
 
     // ItemStack[] Base64 変換関数
-    private String itemStackArrayToBase64(ItemStack[] items) {
-        try {
-            java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream();
-            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
-            dataOutput.writeInt(items.length);
-            for (ItemStack item : items) dataOutput.writeObject(item);
-            dataOutput.close();
-            return java.util.Base64.getEncoder().encodeToString(outputStream.toByteArray());
-        } catch (Exception e) {
-            return null;
+    private List<Map<String, Object>> itemStackArrayToConfigList(ItemStack[] items) {
+        List<Map<String, Object>> configList = new ArrayList<>();
+        for (ItemStack item : items) {
+            if (item != null) {
+                configList.add(item.serialize());
+            } else {
+                configList.add(null);
+            }
         }
+        return configList;
     }
 
-    private ItemStack[] itemStackArrayFromBase64(String data) {
-        try {
-            byte[] bytes = java.util.Base64.getDecoder().decode(data);
-            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(new java.io.ByteArrayInputStream(bytes));
-            int length = dataInput.readInt();
-            ItemStack[] items = new ItemStack[length];
-            for (int i = 0; i < length; i++) items[i] = (ItemStack) dataInput.readObject();
-            dataInput.close();
-            return items;
-        } catch (Exception e) {
-            return null;
+
+    private ItemStack[] itemStackArrayFromConfigList(List<?> configList) {
+        if (configList == null) return null;
+
+        ItemStack[] items = new ItemStack[configList.size()];
+        for (int i = 0; i < configList.size(); i++) {
+            if (configList.get(i) != null && configList.get(i) instanceof Map) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> itemData = (Map<String, Object>) configList.get(i);
+                items[i] = ItemStack.deserialize(itemData);
+            } else {
+                items[i] = null;
+            }
         }
+        return items;
     }
+
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
@@ -72,8 +72,8 @@ public class Ohatsukit_C implements CommandExecutor {
                             return true;
                         }
                         PlayerInventory inv = player.getInventory();
-                        String inventoryBase64 = itemStackArrayToBase64(inv.getContents());
-                        plugin.getConfig().set("ohatsukit.inv", inventoryBase64);
+                        List<Map<String, Object>> inventoryData = itemStackArrayToConfigList(inv.getContents());
+                        plugin.getConfig().set("ohatsukit.inv", inventoryData);
                         plugin.saveConfig();
                         sender.sendMessage(Global.prefix + "§a現在の装備と所持品を登録しました§r");
                         return true;
@@ -82,8 +82,8 @@ public class Ohatsukit_C implements CommandExecutor {
                 }
             case 2:
                 if (!args[0].equalsIgnoreCase("give")) return false;
-                String savedInv = plugin.getConfig().getString("ohatsukit.inv");
-                if (savedInv == null) {
+                List<?> savedInvData = plugin.getConfig().getList("ohatsukit.inv");
+                if (savedInvData == null) {
                     sender.sendMessage(Global.prefix + "§ckitが登録されていません§r");
                     return true;
                 }
@@ -92,7 +92,7 @@ public class Ohatsukit_C implements CommandExecutor {
                     sender.sendMessage(Global.prefix + "§cプレイヤーが見つかりません§r");
                     return true;
                 }
-                ItemStack[] inv = itemStackArrayFromBase64(savedInv);
+                ItemStack[] inv = itemStackArrayFromConfigList(savedInvData);
                 ItemStack[] targetInv = targetPlayer.getInventory().getContents();
                 if (inv != null) {
                     //同じ場所が空いていたらできるだけ同じ場所へ

@@ -9,4 +9,4 @@ mwhitelist:
 
 #luckparmsでgroup.gm持ってないopを確認するかどうか
 opcheck:
-  mode: false
+  mode: true

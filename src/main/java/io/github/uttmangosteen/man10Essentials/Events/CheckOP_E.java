@@ -5,11 +5,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class CheckOP_E implements Listener {
     @EventHandler
-    public void onLogin(PlayerLoginEvent e) {
+    public void onLogin(PlayerJoinEvent e) {
         if (!Global.enabled_opcheck) return;
         Player p = e.getPlayer();
         if (!p.isOp() || p.hasPermission("group.gm")) return;

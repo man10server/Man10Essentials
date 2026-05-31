@@ -1,4 +1,4 @@
-package io.github.uttmangosteen.man10Essentials.Other;
+package io.github.uttmangosteen.man10Essentials.whitelist;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;

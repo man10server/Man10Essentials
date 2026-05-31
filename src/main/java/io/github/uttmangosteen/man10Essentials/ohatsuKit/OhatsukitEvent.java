@@ -1,4 +1,4 @@
-package io.github.uttmangosteen.man10Essentials.Events;
+package io.github.uttmangosteen.man10Essentials.ohatsuKit;
 
 import io.github.uttmangosteen.man10Essentials.Main;
 import net.william278.husksync.event.BukkitPreSyncEvent;
@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Ohatsukit_E implements Listener {
+public class OhatsukitEvent implements Listener {
 
     private final ArrayList<UUID> unNewbies=new ArrayList<>();
 

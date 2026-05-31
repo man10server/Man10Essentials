@@ -1,4 +1,4 @@
-package io.github.uttmangosteen.man10Essentials.Events;
+package io.github.uttmangosteen.man10Essentials.checkOp;
 
 import io.github.uttmangosteen.man10Essentials.Global;
 import org.bukkit.Bukkit;
@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import static io.github.uttmangosteen.man10Essentials.Main.plugin;
 
-public class CheckOP_E implements Listener {
+public class CheckOPEvent implements Listener {
     @EventHandler
     public void onLogin(PlayerJoinEvent e) {
         if (!Global.enabled_opcheck) return;

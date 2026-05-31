@@ -1,4 +1,4 @@
-package io.github.uttmangosteen.man10Essentials.Commands;
+package io.github.uttmangosteen.man10Essentials.mhat;
 
 import io.github.uttmangosteen.man10Essentials.Global;
 import org.bukkit.command.CommandExecutor;
@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class MHat_C implements CommandExecutor {
+public class MHatCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, org.bukkit.command.@NotNull Command command, @NotNull String alias, String[] args) {
         if(!(sender instanceof Player player)){

@@ -1,4 +1,4 @@
-package io.github.uttmangosteen.man10Essentials.Events;
+package io.github.uttmangosteen.man10Essentials.mhat;
 
 import io.github.uttmangosteen.man10Essentials.Global;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-public class Mhat_E implements Listener {
+public class MHatEvent implements Listener {
     @EventHandler
     public void onClickHead(InventoryClickEvent e) {
         if (e.getSlotType() == InventoryType.SlotType.ARMOR

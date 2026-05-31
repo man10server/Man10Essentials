@@ -1,4 +1,4 @@
-package io.github.uttmangosteen.man10Essentials.Commands;
+package io.github.uttmangosteen.man10Essentials.ec;
 
 import io.github.uttmangosteen.man10Essentials.Global;
 import org.bukkit.Sound;
@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class EC_C implements CommandExecutor {
+public class ECCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, org.bukkit.command.@NotNull Command command, @NotNull String alias, String[] args) {
         if (!(sender instanceof Player p)) return true;

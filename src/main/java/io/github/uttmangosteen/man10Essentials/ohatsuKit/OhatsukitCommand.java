@@ -1,4 +1,4 @@
-package io.github.uttmangosteen.man10Essentials.Commands;
+package io.github.uttmangosteen.man10Essentials.ohatsuKit;
 
 import io.github.uttmangosteen.man10Essentials.Global;
 import org.bukkit.command.Command;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public record Ohatsukit_C(JavaPlugin plugin) implements CommandExecutor {
+public record OhatsukitCommand(JavaPlugin plugin) implements CommandExecutor {
 
     // ItemStack[] Base64 変換関数
     private List<Map<String, Object>> itemStackArrayToConfigList(ItemStack[] items) {

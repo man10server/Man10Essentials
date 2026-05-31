@@ -1,12 +1,12 @@
 package io.github.uttmangosteen.man10Essentials;
 
-import io.github.uttmangosteen.man10Essentials.Commands.EC_C;
-import io.github.uttmangosteen.man10Essentials.Commands.MHat_C;
-import io.github.uttmangosteen.man10Essentials.Events.CheckOP_E;
-import io.github.uttmangosteen.man10Essentials.Other.MWhitelist;
-import io.github.uttmangosteen.man10Essentials.Commands.Ohatsukit_C;
-import io.github.uttmangosteen.man10Essentials.Events.Mhat_E;
-import io.github.uttmangosteen.man10Essentials.Events.Ohatsukit_E;
+import io.github.uttmangosteen.man10Essentials.ec.ECCommand;
+import io.github.uttmangosteen.man10Essentials.mhat.MHatCommand;
+import io.github.uttmangosteen.man10Essentials.checkOp.CheckOPEvent;
+import io.github.uttmangosteen.man10Essentials.whitelist.MWhitelist;
+import io.github.uttmangosteen.man10Essentials.ohatsuKit.OhatsukitCommand;
+import io.github.uttmangosteen.man10Essentials.mhat.MHatEvent;
+import io.github.uttmangosteen.man10Essentials.ohatsuKit.OhatsukitEvent;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,15 +23,15 @@ public final class Main extends JavaPlugin {
         new MWhitelist(this);
 
         Global.enabled_give_ohatsukit = getConfig().getBoolean("ohatsukit.mode", false);
-        Objects.requireNonNull(getCommand("ohatsukit")).setExecutor(new Ohatsukit_C(this));
-        getServer().getPluginManager().registerEvents(new Ohatsukit_E(), this);
+        Objects.requireNonNull(getCommand("ohatsukit")).setExecutor(new OhatsukitCommand(this));
+        getServer().getPluginManager().registerEvents(new OhatsukitEvent(), this);
 
-        Objects.requireNonNull(getCommand("ec")).setExecutor(new EC_C());
+        Objects.requireNonNull(getCommand("ec")).setExecutor(new ECCommand());
 
-        Objects.requireNonNull(getCommand("mhat")).setExecutor(new MHat_C());
-        getServer().getPluginManager().registerEvents(new Mhat_E(), this);
+        Objects.requireNonNull(getCommand("mhat")).setExecutor(new MHatCommand());
+        getServer().getPluginManager().registerEvents(new MHatEvent(), this);
 
         Global.enabled_opcheck = getConfig().getBoolean("opcheck.mode", false);
-        getServer().getPluginManager().registerEvents(new CheckOP_E(), this);
+        getServer().getPluginManager().registerEvents(new CheckOPEvent(), this);
     }
 }

@@ -1,7 +1,6 @@
 package io.github.uttmangosteen.man10Essentials.mhat;
 
 import io.github.uttmangosteen.man10Essentials.Global;
-import io.github.uttmangosteen.man10Essentials.Main;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,53 +10,24 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-public final class MHatEvent implements Listener {
-
-    private final Main plugin;
-
-    public MHatEvent(Main plugin) {
-        this.plugin = plugin;
-    }
-
+public class MHatEvent implements Listener {
     @EventHandler
-    public void onClickHead(InventoryClickEvent event) {
-        if (!plugin.settings().isEnabled("mhat")) {
-            return;
+    public void onClickHead(InventoryClickEvent e) {
+        if (e.getSlotType() == InventoryType.SlotType.ARMOR
+                && e.getRawSlot() == 5
+                && e.getWhoClicked().getItemOnCursor().getType() != Material.AIR
+                && e.getWhoClicked().getItemOnCursor().getType().getEquipmentSlot() != EquipmentSlot.HEAD){
+            Player player = (Player) e.getWhoClicked();
+            if(player.hasPermission("red.man10.mhat")){
+                ItemStack cursor = player.getItemOnCursor();
+                ItemStack head = player.getInventory().getHelmet();
+                player.setItemOnCursor(head);
+                player.getInventory().setHelmet(cursor);
+                e.setCancelled(true);
+                player.sendMessage(Global.prefix + "§aアイテムを頭にかぶりました§r");
+            } else {
+                player.sendMessage(Global.prefix + "§4あなたは権限を持っていません§r");
+            }
         }
-
-        if (!(event.getWhoClicked() instanceof Player player)) {
-            return;
-        }
-
-        if (event.getSlotType() != InventoryType.SlotType.ARMOR) {
-            return;
-        }
-
-        if (event.getRawSlot() != 5) {
-            return;
-        }
-
-        ItemStack cursor = player.getItemOnCursor();
-
-        if (cursor.getType() == Material.AIR) {
-            return;
-        }
-
-        if (cursor.getType().getEquipmentSlot() == EquipmentSlot.HEAD) {
-            return;
-        }
-
-        if (!player.hasPermission("red.man10.mhat")) {
-            player.sendMessage(Global.PREFIX + "§cあなたは権限を持っていません");
-            return;
-        }
-
-        ItemStack helmet = player.getInventory().getHelmet();
-
-        player.setItemOnCursor(helmet);
-        player.getInventory().setHelmet(cursor);
-
-        event.setCancelled(true);
-        player.sendMessage(Global.PREFIX + "§aアイテムを頭にかぶりました");
     }
 }

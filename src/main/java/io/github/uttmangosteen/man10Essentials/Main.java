@@ -1,49 +1,37 @@
 package io.github.uttmangosteen.man10Essentials;
 
-import io.github.uttmangosteen.man10Essentials.checkOp.CheckOPEvent;
 import io.github.uttmangosteen.man10Essentials.ec.ECCommand;
 import io.github.uttmangosteen.man10Essentials.mhat.MHatCommand;
-import io.github.uttmangosteen.man10Essentials.mhat.MHatEvent;
-import io.github.uttmangosteen.man10Essentials.ohatsuKit.OhatsukitCommand;
-import io.github.uttmangosteen.man10Essentials.ohatsuKit.OhatsukitEvent;
+import io.github.uttmangosteen.man10Essentials.checkOp.CheckOPEvent;
 import io.github.uttmangosteen.man10Essentials.whitelist.MWhitelist;
-import org.bukkit.command.PluginCommand;
+import io.github.uttmangosteen.man10Essentials.ohatsuKit.OhatsukitCommand;
+import io.github.uttmangosteen.man10Essentials.mhat.MHatEvent;
+import io.github.uttmangosteen.man10Essentials.ohatsuKit.OhatsukitEvent;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Main extends JavaPlugin {
+import java.util.Objects;
 
-    private Settings settings;
+public final class Main extends JavaPlugin {
+    public static JavaPlugin plugin;
 
     @Override
     public void onEnable() {
+        plugin = this;
         saveDefaultConfig();
-
-        settings = new Settings(this);
 
         new MWhitelist(this);
 
-        registerCommand("meadmin", new Man10EssentialsCommand(this));
-        registerCommand("ohatsukit", new OhatsukitCommand(this));
-        registerCommand("ec", new ECCommand(this));
-        registerCommand("mhat", new MHatCommand(this));
+        Global.enabled_give_ohatsukit = getConfig().getBoolean("ohatsukit.mode", false);
+        Objects.requireNonNull(getCommand("ohatsukit")).setExecutor(new OhatsukitCommand(this));
+        getServer().getPluginManager().registerEvents(new OhatsukitEvent(), this);
 
-        getServer().getPluginManager().registerEvents(new OhatsukitEvent(this), this);
-        getServer().getPluginManager().registerEvents(new MHatEvent(this), this);
-        getServer().getPluginManager().registerEvents(new CheckOPEvent(this), this);
-    }
+        Objects.requireNonNull(getCommand("ec")).setExecutor(new ECCommand());
 
-    public Settings settings() {
-        return settings;
-    }
+        Objects.requireNonNull(getCommand("mhat")).setExecutor(new MHatCommand());
+        getServer().getPluginManager().registerEvents(new MHatEvent(), this);
 
-    private void registerCommand(String name, org.bukkit.command.CommandExecutor executor) {
-        PluginCommand command = getCommand(name);
-
-        if (command == null) {
-            getLogger().warning("plugin.yml にコマンドが定義されていません: " + name);
-            return;
-        }
-
-        command.setExecutor(executor);
+        Global.enabled_opcheck = getConfig().getBoolean("opcheck.mode", false);
+        getServer().getPluginManager().registerEvents(new CheckOPEvent(), this);
     }
 }

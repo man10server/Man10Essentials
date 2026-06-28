@@ -7,30 +7,52 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import java.util.ArrayList;
+
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
-public class OhatsukitEvent implements Listener {
+public final class OhatsukitEvent implements Listener {
 
-    private final ArrayList<UUID> unNewbies=new ArrayList<>();
+    private final Main plugin;
+    private final Set<UUID> knownPlayers = new HashSet<>();
 
-    @EventHandler
-    public void onPreSync(BukkitPreSyncEvent e){
-        unNewbies.add(e.getUser().getUuid());
+    public OhatsukitEvent(Main plugin) {
+        this.plugin = plugin;
     }
 
     @EventHandler
-    public void onSyncComplete(BukkitSyncCompleteEvent e){
-        Player player=Bukkit.getPlayer(e.getUser().getUuid());
-        if(player==null)return;
-        if(!unNewbies.contains(player.getUniqueId())){
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ohatsukit give " + player.getName());
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "rediseconomy:bal " + player.getName()+" vault give 5000");
-            Bukkit.getScheduler().runTaskLater(Main.plugin, () -> {
-                player.sendMessage("§e§l国王様より初期装備が下賜された！");
-                player.sendMessage("§e§lはじめてのログインです。電子マネー5000円と現金1500円をもらいました! /bank と入力すると電子マネーや銀行口座を確認したり、現金と交換できます。");
-            },20L);
+    public void onPreSync(BukkitPreSyncEvent event) {
+        knownPlayers.add(event.getUser().getUuid());
+    }
+
+    @EventHandler
+    public void onSyncComplete(BukkitSyncCompleteEvent event) {
+        if (!plugin.settings().isEnabled("ohatsukit")) {
+            return;
         }
-        unNewbies.remove(player.getUniqueId());
+
+        Player player = Bukkit.getPlayer(event.getUser().getUuid());
+
+        if (player == null) {
+            return;
+        }
+
+        boolean isFirstLogin = !knownPlayers.contains(player.getUniqueId());
+
+        if (!isFirstLogin) {
+            knownPlayers.remove(player.getUniqueId());
+            return;
+        }
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ohatsukit give " + player.getName());
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "rediseconomy:bal " + player.getName() + " vault give 5000");
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            player.sendMessage("§e§l国王様より初期装備が下賜された！");
+            player.sendMessage("§e§lはじめてのログインです。電子マネー5000円と現金1500円をもらいました! /bank と入力すると電子マネーや銀行口座を確認したり、現金と交換できます。");
+        }, 20L);
+
+        knownPlayers.remove(player.getUniqueId());
     }
 }

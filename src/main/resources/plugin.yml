@@ -2,26 +2,43 @@ name: Man10Essentials
 version: '1.0-SNAPSHOT'
 main: io.github.uttmangosteen.man10Essentials.Main
 api-version: '1.20'
+
 softdepend:
   - HuskSync
 
 commands:
+  meadmin:
+    usage: |
+      /meadmin status
+      /meadmin toggle <ec|mhat|ohatsukit|opcheck|mwhitelist>
+      /meadmin set <ec|mhat|ohatsukit|opcheck|mwhitelist> <true|false>
+    permission: red.man10.admin
+
   ec:
     permission: red.man10.ec
+
   mhat:
     permission: red.man10.mhat
+
   ohatsukit:
-    usage: "
-    §d/ohatsukit <on|off> ...onじゃない鯖に最初に入るとkitが貰えない\n
-    §d/ohatsukit register ...自分の装備と所持品がohatsukitになる\n
-    §d/ohatsukit give [mcid] ...ohatsukitをplayerにgiveする(溢れた分は消える)\n"
+    usage: |
+      /ohatsukit <on|off>
+      /ohatsukit register
+      /ohatsukit give <player>
     permission: red.man10.ohatsukit
+
 permissions:
-  man10essentials.ec:
+  red.man10.admin:
     default: op
-  man10essentials.mhat:
+
+  red.man10.ec:
     default: op
-  man10essentials.ohatsukit:
+
+  red.man10.mhat:
     default: op
+
+  red.man10.ohatsukit:
+    default: op
+
   group.gm:
     default: false

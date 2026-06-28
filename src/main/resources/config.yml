@@ -10,3 +10,24 @@ mwhitelist:
 #luckparmsでgroup.gm持ってないopを確認するかどうか
 opcheck:
   mode: false
+
+features:
+  ec:
+    enabled: true
+  mhat:
+    enabled: true
+  ohatsukit:
+    #man10でだけ mode: true 想定
+    enabled: false
+  opcheck:
+    #luckparmsでgroup.gm持ってないopを確認するかどうか
+    enabled: false
+  mwhitelist:
+    enabled: true
+
+ohatsukit:
+  inv:
+
+# 鯖起動から何秒間whitelistを付けるか
+mwhitelist:
+  waitSeconds: 60
